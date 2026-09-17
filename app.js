@@ -257,7 +257,7 @@ const resources = [
       {
         label: "Robo / vandalismo – 24 h",
         href: "tel:+5493512455981",
-        text: "351-245-5981 · llamada o WhatsApp"
+        text: "3518039687 · llamada o WhatsApp"
       }
     ],
     note: "Para las altas, el asunto del correo debe seguir el formato indicado por la Circular: “Alta Inventario CE … EE … CUE …”, con copia a Supervisión."
@@ -280,8 +280,8 @@ const resources = [
     contacts: [
       {
         label: "Contacto 24 h",
-        href: "tel:+5493512455981",
-        text: "351-245-5981 · llamada o WhatsApp"
+        href: "tel:+5493518039687",
+        text: "3518039687 · llamada o WhatsApp"
       }
     ],
     note: "La Circular recuerda la vigencia del Memo Conjunto N.º 15/2024, que establece indicaciones para el traslado y registro de bienes de valor en dependencias policiales y dispone un contacto disponible las 24 horas.",
