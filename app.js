@@ -45,7 +45,7 @@ const resources = [
             external: true
           },
           {
-            label: "Correo",
+            label: "Correo :",
             href: "mailto:soporte.escuelas@me.cba.gov.ar",
             text: "soporte.escuelas@me.cba.gov.ar"
           }
@@ -147,12 +147,12 @@ const resources = [
 
         contacts: [
           {
-            label: "Teléfono",
+            label: "Teléfono: ",
             href: "tel:+543514462400",
             text: "(0351) 446-2400 · int. 2614"
           },
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:subdir.trayectoriaseducativas@gmail.com",
             text:
@@ -169,7 +169,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:equipocoordinador.epae@me.cba.gov.ar",
             text:
@@ -213,7 +213,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:parlamentoestudiantilcba@gmail.com",
             text:
@@ -230,7 +230,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:relacionesestudiantiles.cba@gmail.com",
             text:
@@ -247,7 +247,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:clubesestudiantilescba@gmail.com",
             text:
@@ -264,7 +264,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:cooperativismo.educacional.cba@gmail.com",
             text:
@@ -330,12 +330,12 @@ const resources = [
 
         contacts: [
           {
-            label: "Teléfono",
+            label: "Teléfono: ",
             href: "tel:+543514642400",
             text: "464-2400 · int. 2514"
           },
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:convivenciaescolarybuentrato@cba.gov.ar",
             text:
@@ -352,12 +352,12 @@ const resources = [
 
         contacts: [
           {
-            label: "Teléfono",
+            label: "Teléfono: ",
             href: "tel:+543514462400",
             text: "0351-4462400 · int. 2614"
           },
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:equipocoordinador.epae@me.cba.gov.ar",
             text:
@@ -402,7 +402,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:subdireccionsalud.edu.cba@gmail.com",
             text:
@@ -442,12 +442,12 @@ const resources = [
 
         contacts: [
           {
-            label: "Teléfono",
+            label: "Teléfono: ",
             href: "tel:+543514602500",
             text: "460-2500"
           },
           {
-            label: "Celular",
+            label: "Celular: ",
             href: "tel:+5493513859923",
             text: "15-385-9923"
           }
@@ -467,7 +467,7 @@ const resources = [
             text: "351-231-5615"
           },
           {
-            label: "Correo",
+            label: "Correo: ",
             href:
               "mailto:fodemeepcba@gmail.com",
             text:
@@ -511,7 +511,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Sección Patrimonial",
+            label: "Sección Patrimonial ",
             href:
               "mailto:seccionpatrimonial@me.cba.gov.ar",
             text:
@@ -528,7 +528,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Llamadas / WhatsApp",
+            label: "Llamadas / WhatsApp: ",
             href: "tel:+5493518039687",
             text: "351-8039687"
           }
@@ -583,7 +583,7 @@ const resources = [
 
         contacts: [
           {
-            label: "Llamadas / WhatsApp",
+            label: "Llamadas / WhatsApp: ",
             href: "tel:+5493518039687",
             text: "351-8039687"
           }
