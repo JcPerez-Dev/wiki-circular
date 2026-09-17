@@ -22,75 +22,88 @@
       </a>
       <nav class="top-nav" aria-label="Navegación principal">
         <a href="#areas">Áreas</a>
-        <a href="#calendario">Calendario</a>
         <a href="#contactos">Contactos</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="hero-content">
-        <p class="eyebrow">CIRCULAR INICIO CICLO LECTIVO 2026</p>
-        <h1>¿Qué situación tenés?</h1>
-        <p class="hero-copy">Encontrá rápidamente qué hacer, dónde gestionar la situación y qué normativa o recurso consultar.</p>
-        <div class="search-wrap">
-          <label for="searchInput" class="sr-only">Buscar una situación</label>
-          <input id="searchInput" type="search" placeholder="Buscar: pase, robo, Internet, trayectoria..." autocomplete="off">
-          <span class="search-hint">⌕</span>
-        </div>
-      </div>
-    </section>
+<main>
+  <section class="hero">
+    <div class="hero-content">
+      <p class="eyebrow">CIRCULAR INICIO CICLO LECTIVO 2026</p>
+      <h1>¿Qué situación tenés?</h1>
+      <p class="hero-copy">
+        Encontrá rápidamente qué hacer, dónde gestionar la situación y qué normativa o recurso consultar.
+      </p>
 
-    <section class="section" id="areas">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">ÁREAS SITUACIONALES</p>
-          <h2>Elegí el área que necesitás</h2>
-        </div>
-        <button class="text-button" id="showAllBtn" type="button">Ver todas</button>
+      <div class="search-wrap">
+        <label for="searchInput" class="sr-only">Buscar una situación</label>
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Buscar: pase, robo, Internet, trayectoria..."
+          autocomplete="off"
+        >
+        <span class="search-hint">⌕</span>
       </div>
-      <div class="area-grid" id="areaGrid"></div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section results-section" id="resultsSection" hidden>
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">RESULTADOS</p>
-          <h2 id="resultsTitle">Situaciones encontradas</h2>
-        </div>
+  <section class="section" id="areas">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">ÁREAS SITUACIONALES</p>
+        <h2>Elegí el área que necesitás</h2>
       </div>
-      <div id="resultsList" class="results-list"></div>
-    </section>
+      <button class="text-button" id="showAllBtn" type="button">
+        Ver todas
+      </button>
+    </div>
 
-    <section class="section calendar-section" id="calendario">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">FECHAS CLAVE</p>
-          <h2>Calendario operativo 2026</h2>
-        </div>
-      </div>
-      <div class="timeline" id="calendarList"></div>
-    </section>
+    <div class="area-grid" id="areaGrid"></div>
+  </section>
 
-    <section class="section contacts-section" id="contactos">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">AYUDA Y DERIVACIÓN</p>
-          <h2>Contactos y canales</h2>
-        </div>
+  <section class="section results-section" id="resultsSection" hidden>
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">RESULTADOS</p>
+        <h2 id="resultsTitle">Situaciones encontradas</h2>
       </div>
-      <div class="contact-grid" id="contactGrid"></div>
-    </section>
+    </div>
 
-    <section class="section source-note">
-      <div class="note-card">
-        <strong>Sobre esta Wiki</strong>
-        <p>Esta primera versión organiza la información de la Circular Inicio Ciclo Lectivo 2026 en formato situacional. Cuando la Circular remite a otra resolución, memo, instructivo o formulario sin desarrollar el procedimiento completo, la Wiki lo identifica como recurso de consulta y no inventa pasos que no estén en la fuente.</p>
-        <p class="small">Documento base: Circular Inicio Ciclo Lectivo 2026, Córdoba, 19 de diciembre de 2025.</p>
+    <div id="resultsList" class="results-list"></div>
+  </section>
+
+  <section class="section contacts-section" id="contactos">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">AYUDA Y DERIVACIÓN</p>
+        <h2>Contactos y canales</h2>
       </div>
-    </section>
-  </main>
+    </div>
+
+    <div class="contact-grid" id="contactGrid"></div>
+  </section>
+
+  <section class="section source-note">
+    <div class="note-card">
+      <strong>Sobre esta Wiki</strong>
+
+      <p>
+        Esta primera versión organiza la información de la Circular
+        Inicio Ciclo Lectivo 2026 en formato situacional. Cuando la
+        Circular remite a otra resolución, memo, instructivo o formulario
+        sin desarrollar el procedimiento completo, la Wiki lo identifica
+        como recurso de consulta y no inventa pasos que no estén en la fuente.
+      </p>
+
+      <p class="small">
+        Documento base: Circular Inicio Ciclo Lectivo 2026,
+        Córdoba, 19 de diciembre de 2025.
+      </p>
+    </div>
+  </section>
+</main> 
 
   <div class="modal" id="detailModal" hidden>
     <div class="modal-backdrop" data-close></div>
