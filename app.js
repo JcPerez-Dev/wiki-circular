@@ -188,39 +188,52 @@ const resources = [
   },
 
   {
-    id: "infraestructura",
-    number: "07",
-    title: "INFRAESTRUCTURA",
-    subtitle: "Canales para reclamos de infraestructura",
-    what: "Canales destinados a comunicar y gestionar situaciones relacionadas con la infraestructura de los establecimientos educativos.",
-    use: [
-      "Realizar reclamos de infraestructura en Córdoba Capital.",
-      "Canalizar reclamos de establecimientos del interior mediante FODEMEP."
-    ],
-    contacts: [
-      {
-        label: "Córdoba Capital",
-        href: "tel:+543514602500",
-        text: "460-2500"
-      },
-      {
-        label: "Celular Capital",
-        href: "tel:+5493513859923",
-        text: "15-385-9923"
-      },
-      {
-        label: "FODEMEP – Interior",
-        href: "tel:+5493512315615",
-        text: "351-231-5615"
-      },
-      {
-        label: "Correo FODEMEP",
-        href: "mailto:fodemeepcba@gmail.com",
-        text: "fodemeepcba@gmail.com"
-      }
-    ]
-  },
+  id: "infraestructura",
+  number: "07",
+  title: "INFRAESTRUCTURA",
+  subtitle: "Canales para reclamos de infraestructura",
 
+  what: "Canales destinados a comunicar y gestionar situaciones relacionadas con la infraestructura de los establecimientos educativos.",
+
+  use: [
+    "Realizar reclamos de infraestructura en Córdoba Capital.",
+    "Canalizar reclamos de establecimientos del interior mediante FODEMEP."
+  ],
+
+  contactGroups: [
+    {
+      title: "Córdoba Capital",
+      contacts: [
+        {
+          label: "Teléfono",
+          href: "tel:+543514602500",
+          text: "460-2500"
+        },
+        {
+          label: "Celular",
+          href: "tel:+5493513859923",
+          text: "15-385-9923"
+        }
+      ]
+    },
+
+    {
+      title: "Interior de la Provincia",
+      contacts: [
+        {
+          label: "FODEMEP",
+          href: "tel:+5493512315615",
+          text: "351-231-5615"
+        },
+        {
+          label: "Correo FODEMEP",
+          href: "mailto:fodemeepcba@gmail.com",
+          text: "fodemeepcba@gmail.com"
+        }
+      ]
+    }
+  ]
+},
   {
     id: "inventario",
     number: "08",
@@ -295,15 +308,67 @@ function escapeHtml(value) {
 }
 
 
-function renderContacts(contacts = []) {
+function renderContacts(contacts = [], contactGroups = []) {
+
+  // Contactos agrupados
+  if (contactGroups.length) {
+
+    return `
+      <div class="info-block">
+        <h3>Cómo contactarse</h3>
+
+        <div class="contact-groups">
+
+          ${contactGroups.map(group => `
+
+            <div class="contact-group">
+
+              <h4>
+                ${escapeHtml(group.title)}
+              </h4>
+
+              <div class="contacts">
+
+                ${group.contacts.map(contact => `
+
+                  <a
+                    class="contact-link"
+                    href="${escapeHtml(contact.href)}"
+                    ${contact.href.startsWith("http")
+                      ? 'target="_blank" rel="noopener noreferrer"'
+                      : ""}
+                  >
+                    ${escapeHtml(contact.label)}:
+                    ${escapeHtml(contact.text)}
+                  </a>
+
+                `).join("")}
+
+              </div>
+
+            </div>
+
+          `).join("")}
+
+        </div>
+      </div>
+    `;
+  }
+
+
+  // Contactos normales
   if (!contacts.length) return "";
+
 
   return `
     <div class="info-block">
+
       <h3>Cómo contactarse</h3>
 
       <div class="contacts">
+
         ${contacts.map(contact => `
+
           <a
             class="contact-link"
             href="${escapeHtml(contact.href)}"
@@ -313,8 +378,11 @@ function renderContacts(contacts = []) {
           >
             ${escapeHtml(contact.text)}
           </a>
+
         `).join("")}
+
       </div>
+
     </div>
   `;
 }
@@ -420,7 +488,7 @@ function renderCard(item) {
         }
 
 
-        ${renderContacts(item.contacts)}
+        ${renderContacts(item.contacts, item.contactGroups)}
 
 
         ${renderResources(item.resources)}
