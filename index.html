@@ -1,86 +1,270 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Wiki operativa de la Circular Inicio Ciclo Lectivo 2026.">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <meta
+    name="description"
+    content="Wiki operativa de la Circular Inicio Ciclo Lectivo 2026."
+  >
+
   <title>Circular 2026 | ENSAC</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+
+  <!-- Tipografías -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Estilos -->
+  <link
+    rel="stylesheet"
+    href="styles.css"
+  >
 </head>
 
+
 <body>
-  <header class="site-header" id="inicio">
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header
+    class="site-header"
+    id="inicio"
+  >
+
     <div class="header-inner">
-      <a class="brand" href="#inicio" aria-label="Inicio Circular 2026">
-        <span class="brand-kicker">ENSAC</span>
-        <span class="brand-title">Circular 2026</span>
+
+      <a
+        class="brand"
+        href="#inicio"
+        aria-label="Inicio Circular 2026"
+      >
+
+        <span class="brand-kicker">
+          ENSAC
+        </span>
+
+        <span class="brand-title">
+          Circular 2026
+        </span>
+
       </a>
 
-      <nav class="top-nav" aria-label="Navegación principal">
-        <a href="#recursos">Recursos</a>
-        <a href="#contactos">Contactos</a>
+
+      <nav
+        class="top-nav"
+        aria-label="Navegación principal"
+      >
+
+        <a href="#recursos">
+          Recursos
+        </a>
+
+        <a href="#inicio">
+          Inicio
+        </a>
+
       </nav>
+
     </div>
+
   </header>
 
+
+
+  <!-- =====================================================
+       CONTENIDO PRINCIPAL
+  ====================================================== -->
+
   <main>
+
+
+    <!-- ===================================================
+         HERO
+    ==================================================== -->
+
     <section class="hero">
+
       <div class="hero-inner">
-        <p class="eyebrow">INICIO CICLO LECTIVO 2026</p>
-        <h1>Guía operativa</h1>
-        <p class="hero-copy">
-          Acceso rápido a procedimientos, recursos y canales de contacto
-          mencionados en la Circular de Inicio de Ciclo Lectivo 2026.
+
+        <p class="eyebrow">
+          INICIO CICLO LECTIVO 2026
         </p>
 
+
+        <h1>
+          Guía operativa
+        </h1>
+
+
+        <p class="hero-copy">
+          Acceso rápido a procedimientos, recursos y
+          canales de contacto mencionados en la
+          Circular de Inicio de Ciclo Lectivo 2026.
+        </p>
+
+
+        <!-- BUSCADOR -->
+
         <div class="search-wrap">
-          <label for="search" class="sr-only">Buscar recursos</label>
-          <input id="search" type="search" placeholder="Buscar por tema, procedimiento o contacto..." autocomplete="off">
-          <span id="result-count" class="result-count" aria-live="polite"></span>
+
+          <label
+            for="search"
+            class="sr-only"
+          >
+            Buscar recursos
+          </label>
+
+
+          <input
+            id="search"
+            type="search"
+            placeholder="Buscar por tema, procedimiento o contacto..."
+            autocomplete="off"
+          >
+
+
+          <span
+            id="result-count"
+            class="result-count"
+            aria-live="polite"
+          ></span>
+
         </div>
+
       </div>
+
     </section>
 
-    <section class="layout" id="recursos">
-      <aside class="sidebar" aria-label="Índice de recursos">
-        <div class="sidebar-title">Índice</div>
-        <nav id="toc" class="toc"></nav>
+
+
+    <!-- ===================================================
+         ÁREA DE RECURSOS
+    ==================================================== -->
+
+    <section
+      class="layout"
+      id="recursos"
+    >
+
+
+      <!-- =================================================
+           ÍNDICE LATERAL
+      ================================================== -->
+
+      <aside
+        class="sidebar"
+        aria-label="Índice de recursos"
+      >
+
+        <div class="sidebar-title">
+          Índice
+        </div>
+
+
+        <nav
+          id="toc"
+          class="toc"
+          aria-label="Recursos de la circular"
+        ></nav>
+
       </aside>
 
-      <div class="content">
-        <div id="cards" class="cards"></div>
 
-        <div id="empty-state" class="empty-state" hidden>
-          <h2>No se encontraron resultados</h2>
-          <p>Probá con otro término de búsqueda.</p>
+
+      <!-- =================================================
+           CARDS
+      ================================================== -->
+
+      <div class="content">
+
+        <div
+          id="cards"
+          class="cards"
+        ></div>
+
+
+        <!-- =================================================
+             ESTADO SIN RESULTADOS
+        ================================================== -->
+
+        <div
+          id="empty-state"
+          class="empty-state"
+          hidden
+        >
+
+          <h2>
+            No se encontraron resultados
+          </h2>
+
+          <p>
+            Probá con otro término de búsqueda.
+          </p>
+
         </div>
 
-        <section class="contact-section" id="contactos">
-          <div class="section-heading">
-            <p class="eyebrow">CONTACTOS</p>
-            <h2>Canales de atención</h2>
-            <p>
-              Los canales están organizados por temática para facilitar la
-              comunicación con las áreas correspondientes.
-            </p>
-          </div>
-          <div id="contact-list" class="contact-list"></div>
-        </section>
       </div>
+
     </section>
+
   </main>
 
+
+
+  <!-- =====================================================
+       FOOTER
+  ====================================================== -->
+
   <footer class="site-footer">
+
     <div>
-      <strong>Escuela Normal Superior Dr. Alejandro Carbó</strong>
-      <span>Guía operativa · Circular Inicio Ciclo Lectivo 2026</span>
+
+      <strong>
+        Escuela Normal Superior Dr. Alejandro Carbó
+      </strong>
+
+      <span>
+        Guía operativa · Circular Inicio Ciclo Lectivo 2026
+      </span>
+
     </div>
-    <a href="#inicio">Volver al inicio</a>
+
+
+    <a href="#inicio">
+      Volver al inicio
+    </a>
+
   </footer>
 
+
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
+
   <script src="app.js"></script>
+
 </body>
+
 </html>
