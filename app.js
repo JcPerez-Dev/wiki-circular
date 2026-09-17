@@ -529,7 +529,7 @@ const resources = [
         contacts: [
           {
             label: "Llamadas / WhatsApp: ",
-            href: "tel:+5493518039687",
+            href: "wa.me/+5493518039687",
             text: "351-8039687"
           }
         ]
@@ -584,7 +584,7 @@ const resources = [
         contacts: [
           {
             label: "Llamadas / WhatsApp: ",
-            href: "tel:+5493518039687",
+            href: "wa.me/+5493518039687",
             text: "351-8039687"
           }
         ]
