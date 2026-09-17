@@ -1,30 +1,39 @@
 // ============================================================
-// CIRCULAR 2026 - NAVEGADOR DE SITUACIONES Y PROCEDIMIENTOS
-// Ministerio de Educación - Córdoba
+// CIRCULAR 2026
+// NAVEGADOR DE SITUACIONES Y PROCEDIMIENTOS
+// Provincia de Córdoba
 // ============================================================
+
+"use strict";
 
 let procedimientos = [];
 
 // ------------------------------------------------------------
-// ELEMENTOS DEL DOM
+// ELEMENTOS
 // ------------------------------------------------------------
 
-const homeView = document.getElementById("homeView");
-const navigatorView = document.getElementById("navigatorView");
-const procedureView = document.getElementById("procedureView");
+const home = document.getElementById("home");
+const navigator = document.getElementById("navigator");
+const procedure = document.getElementById("procedure");
 
-const categoriesContainer = document.getElementById("categories");
-const situationsContainer = document.getElementById("situations");
-const procedureContainer = document.getElementById("procedure");
+const categories = document.getElementById("categories");
+const choices = document.getElementById("choices");
 
+const searchForm = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const searchResults = document.getElementById("searchResults");
 
-const backHomeBtn = document.getElementById("backHome");
-const backNavigatorBtn = document.getElementById("backNavigator");
+const categoryCount = document.getElementById("categoryCount");
+
+const backHome = document.getElementById("backHome");
+
+const breadcrumb = document.getElementById("breadcrumb");
+const navTitle = document.getElementById("navTitle");
+const navDescription = document.getElementById("navDescription");
+
 
 // ------------------------------------------------------------
-// DESCRIPCIONES DE CATEGORÍAS
+// DESCRIPCIONES
 // ------------------------------------------------------------
 
 const categoryDescriptions = {
@@ -35,10 +44,10 @@ const categoryDescriptions = {
         "Formación, certificaciones y gestión de SIPEC.",
 
     "Trayectorias educativas":
-        "Acompañamiento, alertas e intervenciones sobre las trayectorias.",
+        "Acompañamiento y seguimiento de las trayectorias educativas.",
 
     "Convivencia":
-        "Acuerdos institucionales, convivencia escolar y buen trato.",
+        "Convivencia escolar, acuerdos institucionales y buen trato.",
 
     "Currículum":
         "Diseños curriculares, TransFORMAR@Cba y propuestas institucionales.",
@@ -47,7 +56,7 @@ const categoryDescriptions = {
         "SGE, Relevamiento Anual, matrícula y sistemas de información.",
 
     "Evaluación":
-        "Evaluación institucional y procesos vinculados.",
+        "Procesos y procedimientos relacionados con evaluación.",
 
     "Cooperadoras":
         "Asociaciones cooperadoras, asambleas y documentación.",
@@ -56,10 +65,10 @@ const categoryDescriptions = {
         "Vacantes, cobertura, reubicaciones y altas.",
 
     "Bienestar":
-        "Boleto Educativo Gratuito y otras políticas de bienestar.",
+        "Políticas y procedimientos relacionados con bienestar.",
 
     "Infraestructura":
-        "Mantenimiento, edificios y situaciones de infraestructura.",
+        "Edificios escolares, mantenimiento y situaciones de infraestructura.",
 
     "Patrimonio":
         "Inventario, bienes institucionales, robos y vandalismo.",
@@ -68,7 +77,7 @@ const categoryDescriptions = {
         "Seguridad institucional y espacios compartidos.",
 
     "Salud":
-        "Situaciones relacionadas con salud y entornos educativos.",
+        "Salud y entornos educativos.",
 
     "Socioeducativo":
         "Iniciativas y propuestas socioeducativas.",
@@ -77,8 +86,9 @@ const categoryDescriptions = {
         "Fechas y acciones previstas para el ciclo lectivo.",
 
     "Otros":
-        "Otros procedimientos y orientaciones de la Circular 2026."
+        "Otros procedimientos contemplados en la Circular 2026."
 };
+
 
 // ------------------------------------------------------------
 // INICIO
@@ -90,30 +100,31 @@ async function iniciar() {
 
     try {
 
-        const response = await fetch("procedimientos.json", {
+        const response = await fetch("./procedimientos.json", {
             cache: "no-store"
         });
 
         if (!response.ok) {
             throw new Error(
-                `No se pudo cargar procedimientos.json (${response.status})`
+                "No se pudo cargar procedimientos.json"
             );
         }
 
         const data = await response.json();
 
-        // Admite tanto:
-        // { procedimientos: [...] }
-        // como directamente [...]
-        if (Array.isArray(data)) {
-            procedimientos = data;
-        } else if (Array.isArray(data.procedimientos)) {
-            procedimientos = data.procedimientos;
-        } else if (Array.isArray(data.data)) {
-            procedimientos = data.data;
-        } else {
-            throw new Error("El archivo procedimientos.json no contiene un listado válido.");
+        // El JSON actual tiene:
+        // {
+        //   ...
+        //   "procedimientos": [...]
+        // }
+
+        if (!Array.isArray(data.procedimientos)) {
+            throw new Error(
+                "El archivo procedimientos.json no contiene el campo procedimientos."
+            );
         }
+
+        procedimientos = data.procedimientos;
 
         renderCategories();
 
@@ -121,22 +132,23 @@ async function iniciar() {
 
     } catch (error) {
 
-        console.error("Error al iniciar la aplicación:", error);
+        console.error(error);
 
-        if (categoriesContainer) {
-            categoriesContainer.innerHTML = `
-                <div class="error-message">
-                    <strong>No se pudieron cargar los procedimientos.</strong>
-                    <p>
-                        Verificá que <code>procedimientos.json</code>
-                        se encuentre en la misma carpeta que esta página.
-                    </p>
-                    <small>${escapeHTML(error.message)}</small>
+        categories.innerHTML = `
+            <div class="result-card">
+                <div class="card-title">
+                    No se pudieron cargar los procedimientos
                 </div>
-            `;
-        }
+
+                <div class="card-description">
+                    Verificá que procedimientos.json esté en la
+                    misma carpeta que index.html.
+                </div>
+            </div>
+        `;
     }
 }
+
 
 // ------------------------------------------------------------
 // EVENTOS
@@ -144,18 +156,37 @@ async function iniciar() {
 
 function configurarEventos() {
 
-    if (backHomeBtn) {
-        backHomeBtn.addEventListener("click", mostrarInicio);
+    // Botón volver
+    if (backHome) {
+        backHome.addEventListener("click", () => {
+            mostrarHome();
+        });
     }
 
-    if (backNavigatorBtn) {
-        backNavigatorBtn.addEventListener("click", mostrarNavegador);
+    // Buscador
+    if (searchForm) {
+
+        searchForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            ejecutarBusqueda();
+        });
     }
 
     if (searchInput) {
-        searchInput.addEventListener("input", manejarBusqueda);
+
+        searchInput.addEventListener("input", function () {
+
+            const texto = searchInput.value.trim();
+
+            if (texto.length === 0) {
+                limpiarBusqueda();
+            }
+        });
     }
 }
+
 
 // ------------------------------------------------------------
 // CATEGORÍAS
@@ -163,402 +194,370 @@ function configurarEventos() {
 
 function obtenerCategorias() {
 
-    const mapa = new Map();
+    const mapa = {};
 
-    procedimientos.forEach(procedimiento => {
+    procedimientos.forEach(item => {
 
-        const categoria =
-            procedimiento.categoria ||
-            procedimiento.categoría ||
-            "Otros";
+        const categoria = obtenerCategoria(item);
 
-        if (!mapa.has(categoria)) {
-            mapa.set(categoria, []);
+        if (!mapa[categoria]) {
+            mapa[categoria] = [];
         }
 
-        mapa.get(categoria).push(procedimiento);
+        mapa[categoria].push(item);
     });
 
-    return Array.from(mapa.entries())
-        .sort((a, b) => a[0].localeCompare(b[0], "es"));
+    return Object.entries(mapa)
+        .sort((a, b) =>
+            a[0].localeCompare(b[0], "es")
+        );
 }
 
+
 // ------------------------------------------------------------
-// RENDER DE CATEGORÍAS
+// RENDER CATEGORÍAS
 // ------------------------------------------------------------
 
 function renderCategories() {
 
-    if (!categoriesContainer) return;
+    if (!categories) return;
 
-    const categorias = obtenerCategorias();
+    categories.innerHTML = "";
 
-    categoriesContainer.innerHTML = "";
+    const lista = obtenerCategorias();
 
-    if (!categorias.length) {
-
-        categoriesContainer.innerHTML = `
-            <div class="empty-message">
-                No hay categorías disponibles.
-            </div>
-        `;
-
-        return;
+    if (categoryCount) {
+        categoryCount.textContent =
+            `${lista.length} categorías`;
     }
 
-    categorias.forEach(([categoria, items]) => {
+    lista.forEach(([categoria, items]) => {
 
-        const card = document.createElement("button");
+        const button = document.createElement("button");
 
-        card.type = "button";
-        card.className = "category-card";
+        button.type = "button";
+        button.className = "category-card";
 
         const descripcion =
             categoryDescriptions[categoria] ||
             "Situaciones y procedimientos relacionados con esta categoría.";
 
-        card.innerHTML = `
-            <span class="category-title">
+        button.innerHTML = `
+            <span class="card-title">
                 ${escapeHTML(categoria)}
             </span>
 
-            <span class="category-description">
+            <span class="card-description">
                 ${escapeHTML(descripcion)}
             </span>
 
-            <span class="category-count">
+            <span class="card-arrow">
                 ${items.length}
                 ${items.length === 1 ? "procedimiento" : "procedimientos"}
+                →
             </span>
         `;
 
-        card.addEventListener("click", () => {
-            mostrarSituaciones(categoria);
+        button.addEventListener("click", function () {
+
+            mostrarCategoria(categoria, items);
+
         });
 
-        categoriesContainer.appendChild(card);
+        categories.appendChild(button);
     });
 }
 
+
 // ------------------------------------------------------------
-// MOSTRAR SITUACIONES DE UNA CATEGORÍA
+// MOSTRAR CATEGORÍA
 // ------------------------------------------------------------
 
-function mostrarSituaciones(categoria) {
+function mostrarCategoria(categoria, items) {
 
-    const items = procedimientos
-        .filter(procedimiento => {
+    mostrarNavigator();
 
-            const cat =
-                procedimiento.categoria ||
-                procedimiento.categoría ||
-                "Otros";
-
-            return cat === categoria;
-        })
-        .sort((a, b) => {
-
-            const situacionA =
-                a.situacion ||
-                a.titulo ||
-                a.nombre ||
-                "";
-
-            const situacionB =
-                b.situacion ||
-                b.titulo ||
-                b.nombre ||
-                "";
-
-            return situacionA.localeCompare(situacionB, "es");
-        });
-
-    if (!situationsContainer) return;
-
-    situationsContainer.innerHTML = "";
-
-    const title = document.getElementById("navigatorTitle");
-
-    if (title) {
-        title.textContent = categoria;
+    if (navTitle) {
+        navTitle.textContent = categoria;
     }
 
-    if (!items.length) {
+    if (navDescription) {
 
-        situationsContainer.innerHTML = `
-            <div class="empty-message">
-                No se encontraron situaciones para esta categoría.
-            </div>
-        `;
+        navDescription.textContent =
+            categoryDescriptions[categoria] ||
+            "Seleccioná una situación para consultar el procedimiento.";
+    }
 
-    } else {
+    if (breadcrumb) {
 
-        items.forEach(item => {
+        breadcrumb.textContent =
+            `Circular 2026 / ${categoria}`;
+    }
 
-            const button = document.createElement("button");
+    if (procedure) {
 
-            button.type = "button";
-            button.className = "situation-card";
+        procedure.classList.add("hidden");
+        procedure.innerHTML = "";
+    }
 
-            const situacion =
-                item.situacion ||
-                item.titulo ||
-                item.nombre ||
-                "Situación sin título";
+    if (!choices) return;
 
-            const nivel =
-                item.nivel_modalidad ||
-                item.nivel ||
-                item.modalidad ||
-                "";
+    choices.innerHTML = "";
 
-            const seccion =
-                item.seccion ||
-                item.sección ||
-                "";
+    const ordenados = [...items].sort((a, b) => {
 
-            button.innerHTML = `
-                <span class="situation-title">
-                    ${escapeHTML(situacion)}
+        const textoA = obtenerSituacion(a);
+        const textoB = obtenerSituacion(b);
+
+        return textoA.localeCompare(textoB, "es");
+    });
+
+    ordenados.forEach(item => {
+
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "choice-card";
+
+        button.innerHTML = `
+            <span>
+                <span class="card-title">
+                    ${escapeHTML(obtenerSituacion(item))}
                 </span>
 
-                ${
-                    nivel
-                        ? `
-                            <span class="situation-meta">
-                                ${escapeHTML(nivel)}
-                            </span>
-                          `
-                        : ""
-                }
+                ${renderMeta(item)}
+            </span>
+        `;
 
-                ${
-                    seccion
-                        ? `
-                            <span class="situation-section">
-                                ${escapeHTML(seccion)}
-                            </span>
-                          `
-                        : ""
-                }
-            `;
+        button.addEventListener("click", function () {
 
-            button.addEventListener("click", () => {
-                mostrarProcedimiento(item);
-            });
-
-            situationsContainer.appendChild(button);
+            mostrarProcedimiento(item);
         });
-    }
 
-    mostrarVista("navigatorView");
+        choices.appendChild(button);
+    });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
+
 // ------------------------------------------------------------
-// MOSTRAR PROCEDIMIENTO
+// METADATA
 // ------------------------------------------------------------
 
-function mostrarProcedimiento(item) {
+function renderMeta(item) {
 
-    if (!procedureContainer) return;
+    const partes = [];
 
-    const situacion =
-        item.situacion ||
-        item.titulo ||
-        item.nombre ||
-        "Procedimiento";
-
-    const queHacer =
-        item.que_hacer ||
-        item.queHacer ||
-        item.procedimiento ||
-        "";
-
-    const donde =
-        item.donde ||
-        "";
-
-    const contacto =
-        item.contacto ||
-        "";
-
-    const plazos =
-        item.plazos ||
-        "";
-
-    const aclaraciones =
-        item.aclaraciones ||
-        item.aclaracion ||
-        "";
-
-    const fuente =
-        item.fuente ||
-        "";
-
-    const paginas =
-        item.paginas ||
-        item.páginas ||
-        "";
-
-    const nivel =
+    const nivel = convertirTexto(
         item.nivel_modalidad ||
         item.nivel ||
-        item.modalidad ||
-        "";
+        item.modalidad
+    );
 
     const seccion =
         item.seccion ||
         item.sección ||
         "";
 
+    if (nivel) {
+        partes.push(nivel);
+    }
+
+    if (seccion) {
+        partes.push(seccion);
+    }
+
+    if (!partes.length) {
+        return "";
+    }
+
+    return `
+        <span class="card-description">
+            ${escapeHTML(partes.join(" · "))}
+        </span>
+    `;
+}
+
+
+// ------------------------------------------------------------
+// PROCEDIMIENTO
+// ------------------------------------------------------------
+
+function mostrarProcedimiento(item) {
+
+    mostrarNavigator();
+
+    if (choices) {
+        choices.innerHTML = "";
+    }
+
+    if (navTitle) {
+        navTitle.textContent = "Procedimiento";
+    }
+
+    if (navDescription) {
+        navDescription.textContent =
+            "Información contenida en la Circular Inicio Ciclo Lectivo 2026.";
+    }
+
+    if (breadcrumb) {
+
+        breadcrumb.textContent =
+            `Circular 2026 / ${obtenerCategoria(item)}`;
+    }
+
+    if (!procedure) return;
+
+    procedure.classList.remove("hidden");
+
+    const categoria = obtenerCategoria(item);
+    const situacion = obtenerSituacion(item);
+
     let html = "";
 
     html += `
-        <div class="procedure-header">
-            <span class="procedure-label">
-                ${escapeHTML(
-                    item.categoria ||
-                    item.categoría ||
-                    "Procedimiento"
-                )}
+        <div>
+            <span class="card-description">
+                ${escapeHTML(categoria)}
             </span>
 
-            <h2>
+            <h3>
                 ${escapeHTML(situacion)}
-            </h2>
-
-            ${
-                nivel
-                    ? `
-                        <p class="procedure-meta">
-                            ${escapeHTML(nivel)}
-                        </p>
-                      `
-                    : ""
-            }
-
-            ${
-                seccion
-                    ? `
-                        <p class="procedure-section">
-                            ${escapeHTML(seccion)}
-                        </p>
-                      `
-                    : ""
-            }
+            </h3>
         </div>
     `;
 
-    if (queHacer) {
+    agregarBloque(
+        "Qué hacer",
+        item.que_hacer,
+        html,
+        value => {
+            html = value;
+        }
+    );
 
-        html += `
-            <section class="procedure-block">
-                <h3>Qué hacer</h3>
-                <div>
-                    ${formatText(queHacer)}
-                </div>
-            </section>
-        `;
-    }
+    agregarBloque(
+        "Dónde",
+        item.donde,
+        html,
+        value => {
+            html = value;
+        }
+    );
 
-    if (donde) {
+    agregarBloque(
+        "Contacto",
+        item.contacto,
+        html,
+        value => {
+            html = value;
+        }
+    );
 
-        html += `
-            <section class="procedure-block">
-                <h3>Dónde</h3>
-                <div>
-                    ${formatText(donde)}
-                </div>
-            </section>
-        `;
-    }
+    agregarBloque(
+        "Plazos",
+        item.plazos,
+        html,
+        value => {
+            html = value;
+        }
+    );
 
-    if (contacto) {
+    agregarBloque(
+        "Aclaración",
+        item.aclaraciones ||
+        item.aclaracion,
+        html,
+        value => {
+            html = value;
+        }
+    );
 
-        html += `
-            <section class="procedure-block">
-                <h3>Contacto</h3>
-                <div>
-                    ${formatText(contacto)}
-                </div>
-            </section>
-        `;
-    }
+    // --------------------------------------------------------
+    // FUENTE
+    // --------------------------------------------------------
 
-    if (plazos) {
-
-        html += `
-            <section class="procedure-block">
-                <h3>Plazos</h3>
-                <div>
-                    ${formatText(plazos)}
-                </div>
-            </section>
-        `;
-    }
-
-    if (aclaraciones) {
-
-        html += `
-            <section class="procedure-block">
-                <h3>Aclaración</h3>
-                <div>
-                    ${formatText(aclaraciones)}
-                </div>
-            </section>
-        `;
-    }
+    const fuente = convertirTexto(item.fuente);
+    const paginas = convertirTexto(
+        item.paginas ||
+        item.páginas
+    );
 
     if (fuente || paginas) {
 
         html += `
-            <section class="procedure-source">
-                <h3>Fuente</h3>
+            <div class="source">
+
+                <h4>Fuente</h4>
 
                 ${
                     fuente
-                        ? `
-                            <p>
-                                ${formatText(fuente)}
-                            </p>
-                          `
+                        ? `<p>${formatText(fuente)}</p>`
                         : ""
                 }
 
                 ${
                     paginas
-                        ? `
-                            <p>
-                                <strong>Páginas:</strong>
-                                ${escapeHTML(String(paginas))}
-                            </p>
-                          `
+                        ? `<p>Páginas: ${escapeHTML(paginas)}</p>`
                         : ""
                 }
-            </section>
+
+            </div>
         `;
     }
 
-    procedureContainer.innerHTML = html;
+    procedure.innerHTML = html;
 
-    mostrarVista("procedureView");
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
+
 // ------------------------------------------------------------
-// BÚSQUEDA
+// AGREGAR BLOQUE
 // ------------------------------------------------------------
 
-function manejarBusqueda(event) {
+function agregarBloque(titulo, contenido, html, callback) {
 
-    const termino = normalizar(event.target.value.trim());
+    const texto = convertirTexto(contenido);
 
-    if (!searchResults) return;
+    if (!texto) {
+        callback(html);
+        return;
+    }
+
+    html += `
+        <div>
+            <h4>${escapeHTML(titulo)}</h4>
+            <div>
+                ${formatText(texto)}
+            </div>
+        </div>
+    `;
+
+    callback(html);
+}
+
+
+// ------------------------------------------------------------
+// BUSCADOR
+// ------------------------------------------------------------
+
+function ejecutarBusqueda() {
+
+    if (!searchInput || !searchResults) return;
+
+    const termino = normalizar(searchInput.value);
 
     if (!termino) {
 
-        searchResults.innerHTML = "";
-        searchResults.classList.remove("active");
-
+        limpiarBusqueda();
         return;
     }
 
@@ -569,26 +568,7 @@ function manejarBusqueda(event) {
     const resultados = procedimientos
         .map(item => {
 
-            const texto = normalizar(
-                [
-                    item.situacion,
-                    item.categoria,
-                    item.categoría,
-                    item.seccion,
-                    item.sección,
-                    item.nivel_modalidad,
-                    item.nivel,
-                    item.modalidad,
-                    item.keywords,
-                    item.palabras_clave,
-                    item.palabrasClave,
-                    item.que_hacer,
-                    item.donde,
-                    item.contacto
-                ]
-                    .filter(Boolean)
-                    .join(" ")
-            );
+            const texto = obtenerTextoBuscable(item);
 
             let coincidencias = 0;
 
@@ -605,51 +585,111 @@ function manejarBusqueda(event) {
             };
 
         })
-        .filter(resultado => resultado.coincidencias > 0)
+        .filter(resultado =>
+            resultado.coincidencias > 0
+        )
         .sort((a, b) => {
 
-            if (b.coincidencias !== a.coincidencias) {
-                return b.coincidencias - a.coincidencias;
+            if (
+                b.coincidencias !==
+                a.coincidencias
+            ) {
+                return (
+                    b.coincidencias -
+                    a.coincidencias
+                );
             }
 
-            const aTitle =
-                a.item.situacion ||
-                a.item.titulo ||
-                "";
-
-            const bTitle =
-                b.item.situacion ||
-                b.item.titulo ||
-                "";
-
-            return aTitle.localeCompare(bTitle, "es");
+            return obtenerSituacion(a.item)
+                .localeCompare(
+                    obtenerSituacion(b.item),
+                    "es"
+                );
         })
-        .slice(0, 12);
+        .slice(0, 15);
 
-    renderSearchResults(resultados);
+    renderResultadosBusqueda(
+        resultados,
+        termino
+    );
 }
 
+
 // ------------------------------------------------------------
-// RESULTADOS DE BÚSQUEDA
+// TEXTO BUSCABLE
 // ------------------------------------------------------------
 
-function renderSearchResults(resultados) {
+function obtenerTextoBuscable(item) {
+
+    const campos = [
+        item.id,
+        item.seccion,
+        item.sección,
+        item.situacion,
+        item.categoria,
+        item.categoría,
+        item.nivel_modalidad,
+        item.nivel,
+        item.modalidad,
+        item.keywords,
+        item.palabras_clave,
+        item.palabrasClave,
+        item.que_hacer,
+        item.donde,
+        item.contacto,
+        item.plazos,
+        item.aclaraciones,
+        item.fuente
+    ];
+
+    return normalizar(
+        campos
+            .map(convertirTexto)
+            .join(" ")
+    );
+}
+
+
+// ------------------------------------------------------------
+// RESULTADOS
+// ------------------------------------------------------------
+
+function renderResultadosBusqueda(
+    resultados,
+    termino
+) {
 
     searchResults.innerHTML = "";
-
-    searchResults.classList.add("active");
 
     if (!resultados.length) {
 
         searchResults.innerHTML = `
-            <div class="search-empty">
-                No encontramos una coincidencia directa.
-                Probá con otra palabra o elegí una categoría.
+            <div class="result-card">
+
+                <div class="card-title">
+                    No encontramos una coincidencia directa.
+                </div>
+
+                <div class="card-description">
+                    Probá con otra palabra o elegí una categoría.
+                </div>
+
             </div>
         `;
 
         return;
     }
+
+    const etiqueta = document.createElement("div");
+
+    etiqueta.className = "search-label";
+
+    etiqueta.textContent =
+        `${resultados.length} resultado${
+            resultados.length === 1 ? "" : "s"
+        } para "${termino}"`;
+
+    searchResults.appendChild(etiqueta);
 
     resultados.forEach(resultado => {
 
@@ -658,88 +698,58 @@ function renderSearchResults(resultados) {
         const button = document.createElement("button");
 
         button.type = "button";
-        button.className = "search-result";
-
-        const situacion =
-            item.situacion ||
-            item.titulo ||
-            item.nombre ||
-            "Situación";
-
-        const categoria =
-            item.categoria ||
-            item.categoría ||
-            "Otros";
+        button.className = "result-card";
 
         button.innerHTML = `
-            <span class="search-result-title">
-                ${escapeHTML(situacion)}
-            </span>
+            <div class="card-title">
+                ${escapeHTML(
+                    obtenerSituacion(item)
+                )}
+            </div>
 
-            <span class="search-result-category">
-                ${escapeHTML(categoria)}
-            </span>
+            <div class="card-description">
+                ${escapeHTML(
+                    obtenerCategoria(item)
+                )}
+            </div>
         `;
 
-        button.addEventListener("click", () => {
+        button.addEventListener("click", function () {
 
             searchInput.value = "";
+
             searchResults.innerHTML = "";
-            searchResults.classList.remove("active");
 
             mostrarProcedimiento(item);
+
         });
 
         searchResults.appendChild(button);
     });
 }
 
+
 // ------------------------------------------------------------
 // NAVEGACIÓN
 // ------------------------------------------------------------
 
-function mostrarInicio() {
+function mostrarHome() {
 
-    mostrarVista("homeView");
+    if (home) {
+        home.classList.remove("hidden");
+    }
 
-    if (searchInput) {
-        searchInput.value = "";
+    if (navigator) {
+        navigator.classList.add("hidden");
+    }
+
+    if (procedure) {
+        procedure.classList.add("hidden");
     }
 
     if (searchResults) {
         searchResults.innerHTML = "";
-        searchResults.classList.remove("active");
     }
-}
-
-function mostrarNavegador() {
-
-    mostrarVista("navigatorView");
-}
-
-function mostrarVista(id) {
-
-    const vistas = [
-        homeView,
-        navigatorView,
-        procedureView
-    ];
-
-    vistas.forEach(view => {
-
-        if (!view) return;
-
-        view.classList.remove("active");
-
-        view.setAttribute("aria-hidden", "true");
-    });
-
-    const vista = document.getElementById(id);
-
-    if (!vista) return;
-
-    vista.classList.add("active");
-    vista.setAttribute("aria-hidden", "false");
 
     window.scrollTo({
         top: 0,
@@ -747,13 +757,90 @@ function mostrarVista(id) {
     });
 }
 
+
+function mostrarNavigator() {
+
+    if (home) {
+        home.classList.add("hidden");
+    }
+
+    if (navigator) {
+        navigator.classList.remove("hidden");
+    }
+
+    if (procedure) {
+        procedure.classList.add("hidden");
+    }
+}
+
+
 // ------------------------------------------------------------
-// NORMALIZACIÓN DE TEXTO
+// OBTENER CAMPOS
+// ------------------------------------------------------------
+
+function obtenerCategoria(item) {
+
+    return convertirTexto(
+        item.categoria ||
+        item.categoría ||
+        "Otros"
+    );
+}
+
+
+function obtenerSituacion(item) {
+
+    return convertirTexto(
+        item.situacion ||
+        item.titulo ||
+        item.nombre ||
+        "Situación sin título"
+    );
+}
+
+
+// ------------------------------------------------------------
+// CONVERTIR ARRAYS / VALORES A TEXTO
+// ------------------------------------------------------------
+
+function convertirTexto(valor) {
+
+    if (
+        valor === null ||
+        valor === undefined
+    ) {
+        return "";
+    }
+
+    if (Array.isArray(valor)) {
+
+        return valor
+            .map(item => convertirTexto(item))
+            .filter(Boolean)
+            .join(" · ");
+    }
+
+    if (
+        typeof valor === "object"
+    ) {
+
+        return Object.values(valor)
+            .map(item => convertirTexto(item))
+            .filter(Boolean)
+            .join(" · ");
+    }
+
+    return String(valor);
+}
+
+
+// ------------------------------------------------------------
+// NORMALIZAR
 // ------------------------------------------------------------
 
 function normalizar(texto) {
 
-    return String(texto || "")
+    return convertirTexto(texto)
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
@@ -762,51 +849,53 @@ function normalizar(texto) {
         .trim();
 }
 
+
 // ------------------------------------------------------------
-// FORMATEO DE TEXTO
+// FORMATEAR TEXTO
 // ------------------------------------------------------------
 
 function formatText(texto) {
 
-    if (texto === null || texto === undefined) {
-        return "";
-    }
+    let resultado =
+        escapeHTML(
+            convertirTexto(texto)
+        );
 
-    let value = String(texto).trim();
+    resultado = resultado
+        .replace(
+            /(https?:\/\/[^\s<]+)/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+        );
 
-    if (!value) {
-        return "";
-    }
+    resultado = resultado
+        .replace(/\n/g, "<br>");
 
-    // Escapamos primero para evitar HTML no deseado
-    value = escapeHTML(value);
-
-    // Saltos de línea
-    value = value.replace(/\r\n/g, "\n");
-    value = value.replace(/\r/g, "\n");
-
-    // Convierte URLs en enlaces
-    value = value.replace(
-        /(https?:\/\/[^\s<]+)/g,
-        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
-    );
-
-    // Saltos de línea
-    value = value.replace(/\n/g, "<br>");
-
-    return value;
+    return resultado;
 }
+
 
 // ------------------------------------------------------------
 // ESCAPE HTML
 // ------------------------------------------------------------
 
-function escapeHTML(value) {
+function escapeHTML(valor) {
 
-    return String(value ?? "")
+    return String(valor ?? "")
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+
+// ------------------------------------------------------------
+// LIMPIAR BUSQUEDA
+// ------------------------------------------------------------
+
+function limpiarBusqueda() {
+
+    if (!searchResults) return;
+
+    searchResults.innerHTML = "";
 }
