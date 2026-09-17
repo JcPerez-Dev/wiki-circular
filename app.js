@@ -529,8 +529,8 @@ const resources = [
         contacts: [
           {
             label: "Llamadas / WhatsApp",
-            href: "tel:+5493512455981",
-            text: "351-245-5981"
+            href: "tel:+5493518039687",
+            text: "351-8039687"
           }
         ]
       }
@@ -579,13 +579,13 @@ const resources = [
         title: "Situaciones de robo o vandalismo",
 
         note:
-          "Para comunicación inmediata de robos o vandalismo se utiliza el canal indicado para estos hechos.",
+          "Para comunicación inmediata de robos o vandalismo se utiliza el canal indicado para estos hechos. Hacer la denuncia correspondiente y el Multinota en CiDi",
 
         contacts: [
           {
             label: "Llamadas / WhatsApp",
-            href: "tel:+5493512455981",
-            text: "351-245-5981"
+            href: "tel:+5493518039687",
+            text: "351-8039687"
           }
         ]
       }
